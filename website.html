@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt Maker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .input-field {
+            padding: 6px;
+            width: 150px; /* Adjust width to align items horizontally */
+            box-sizing: border-box;
+            display: inline-block; /* Align inputs side by side */
+            margin-right: 10px; /* Space between inputs */
+        }
+        .add-product-button, #saveReceiptButton {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px; /* Larger button text */
+        }
+        #saveReceiptButton {
+            background-color: #008CBA;
+        }
+        .add-product-button {
+            float: right; /* Position button to the right */
+            margin-right: 20px; /* Space from the right edge */
+        }
+        .suggestions {
+            position: absolute;
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            max-height: 100px;
+            overflow-y: auto;
+            z-index: 1;
+        }
+        .suggestions li {
+            list-style-type: none;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        .suggestions li:hover {
+            background-color: #ddd;
+        }
+        .receipt-summary {
+            float: right; /* Align to the right */
+        }
+    </style>
+</head>
+<body>
+    <h1>Receipt Maker</h1>
+    <div>
+        <input type="text" id="productName" placeholder="Product Name" class="input-field" oninput="showSuggestions()" onkeydown="handleKeyDown(event)">
+        <ul class="suggestions" id="suggestionList"></ul>
+        <input type="number" id="productQuantity" placeholder="Quantity" class="input-field">
+        <input type="text" id="productPrice" placeholder="Price" class="input-field">
+        <button onclick="addProduct()" class="add-product-button">Add Product</button>
+    </div>
+    <table id="productsTable">
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Products will be added here -->
+        </tbody>
+    </table>
+    <div class="receipt-summary">
+        <table id="summaryTable">
+            <tbody>
+                <tr>
+                    <td>Bill Total</td>
+                    <td id="billTotal">0.00</td>
+                </tr>
+                <tr>
+                    <td>Discount (%)</td>
+                    <td><input type="number" id="discount" class="input-field" oninput="calculateGrandTotal()" value="0"></td>
+                </tr>
+                <tr>
+                    <td>Tax</td>
+                    <td><input type="number" id="tax" class="input-field" oninput="calculateGrandTotal()" value="0"></td>
+                </tr>
+                <tr>
+                    <td>Grand Total</td>
+                    <td id="grandTotal">0.00</td>
+                </tr>
+            </tbody>
+        </table>
+        <button id="saveReceiptButton" onclick="saveReceipt()">Save Receipt</button>
+    </div>
+    <div id="saveStatus"></div>
+
+    <script>
+        let serialNo = 1;
+
+        const suggestions = ["coat pant", "shirt", "t-shirt", "suit", "pant", "blazer", "kurta pajama", "Koti"];
+
+        function showSuggestions() {
+            const input = document.getElementById("productName");
+            const suggestionList = document.getElementById("suggestionList");
+            const userInput = input.value.toLowerCase();
+
+            const suggestionsToShow = suggestions.filter(suggestion =>
+                suggestion.toLowerCase().startsWith(userInput)
+            );
+
+            suggestionList.innerHTML = "";
+            suggestionsToShow.forEach(suggestion => {
+                const li = document.createElement("li");
+                li.textContent = suggestion;
+                li.onclick = () => {
+                    input.value = suggestion;
+                    suggestionList.innerHTML = "";
+                };
+                suggestionList.appendChild(li);
+            });
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter') {
+                const input = document.getElementById("productName");
+                const suggestionList = document.getElementById("suggestionList");
+                const firstSuggestion = suggestionList.querySelector("li");
+
+                if (firstSuggestion) {
+                    input.value = firstSuggestion.textContent;
+                    suggestionList.innerHTML = "";
+                }
+            }
+        }
+
+        function addProduct() {
+            const productName = document.getElementById('productName').value;
+            const productQuantity = parseInt(document.getElementById('productQuantity').value, 10);
+            const productPrice = parseFloat(document.getElementById('productPrice').value);
+            const total = productPrice * productQuantity;
+
+            const table = document.getElementById('productsTable').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow(table.rows.length);
+            newRow.innerHTML = `<td>${serialNo++}</td><td>${productName}</td><td>${productQuantity}</td><td>${productPrice.toFixed(2)}</td><td>${total.toFixed(2)}</td>`;
+
+            // Update bill total
+            calculateBillTotal();
+
+            // Clear inputs after adding
+            document.getElementById('productName').value = '';
+            document.getElementById('productQuantity').value = '';
+            document.getElementById('productPrice').value = '';
+
+            // Clear suggestions list
+            document.getElementById('suggestionList').innerHTML = "";
+        }
+
+        function calculateBillTotal() {
+            const rows = document.getElementById('productsTable').getElementsByTagName('tbody')[0].rows;
+            let billTotal = 0;
+            for (let i = 0; i < rows.length; i++) {
+                billTotal += parseFloat(rows[i].cells[4].innerText);
+            }
+            document.getElementById('billTotal').innerText = billTotal.toFixed(2);
+            calculateGrandTotal();
+        }
+
+        function calculateGrandTotal() {
+            const billTotal = parseFloat(document.getElementById('billTotal').innerText);
+            const discount = parseFloat(document.getElementById('discount').value);
+            const tax = parseFloat(document.getElementById('tax').value);
+            const discountAmount = billTotal * (discount / 100);
+            const grandTotal = billTotal - discountAmount + tax;
+            document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
+        }
+
+        function saveReceipt() {
+            const rows = document.getElementById('productsTable').getElementsByTagName('tbody')[0].rows;
+            if (rows.length === 0) {
+                document.getElementById('saveStatus').innerText = 'No products to save.';
+                return;
+            }
+
+            // Prepare receipt data
+            const receiptData = {
+                tableHTML: document.getElementById('productsTable').outerHTML,
+                billTotal: document.getElementById('billTotal').innerText,
+                discount: document.getElementById('discount').value,
+                tax: document.getElementById('tax').value,
+                grandTotal: document.getElementById('grandTotal').innerText
+            };
+
+            // Store receipt data in localStorage
+            localStorage.setItem('receiptData', JSON.stringify(receiptData));
+
+            // Redirect to saved receipt page
+            window.location.href = 'saved_receipt.html';
+        }
+    </script>
+</body>
+</html>

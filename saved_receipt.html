@@ -21,24 +21,26 @@
         th {
             background-color: #f2f2f2;
         }
-        .editable-input {
-            border: none;
-            background-color: transparent;
-            width: 100%;
-        }
         .receipt-summary {
             float: right; /* Align to the right */
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+                background-color: #f9f9f9;}
+        .editable {
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ESTIMATE</h1>
+    <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ESTIMATE</h1>
     <div id="savedTableContainer">
         <!-- Saved table will be displayed here -->
     </div>
     <div class="receipt-summary">
         <p>Bill Total: <span id="billTotal"></span></p>
-        <p>Discount (%): <span id="discount"></span></p>
+        <p>Discount: <span id="discount"></span></p>
         <p>Tax: <span id="tax"></span></p>
         <p>Grand Total: <span id="grandTotal"></span></p>
     </div>
@@ -56,27 +58,15 @@
                 document.getElementById('tax').innerText = savedReceiptData.tax;
                 document.getElementById('grandTotal').innerText = savedReceiptData.grandTotal;
 
-                // Add event listeners to make product names editable
-                const productNameInputs = document.querySelectorAll('#savedTableContainer input.product-name-input');
-                productNameInputs.forEach(input => {
-                    input.addEventListener('input', function() {
-                        // Update the product name in localStorage when changed
-                        const rowIndex = this.closest('tr').rowIndex;
-                        const updatedProductName = this.value;
-                        const savedTableRows = document.querySelectorAll('#savedTableContainer table tbody tr');
-                        savedTableRows[rowIndex - 1].querySelector('td.product-name').innerText = updatedProductName;
-
-                        // Update the product name in receiptData
-                        const updatedReceiptData = JSON.parse(localStorage.getItem('receiptData'));
-                        updatedReceiptData.tableHTML = document.getElementById('savedTableContainer').innerHTML;
-                        localStorage.setItem('receiptData', JSON.stringify(updatedReceiptData));
+                // Make saved table cells editable
+                const cells = document.querySelectorAll('#savedTableContainer td.editable');
+                cells.forEach(cell => {
+                    cell.addEventListener('click', function() {
+                        const value = prompt('Enter new value:');
+                        if (value !== null) {
+                            this.innerText = value;
+                        }
                     });
-                });
-
-                // Remove checkboxes from the saved table
-                const savedTableCheckboxes = document.querySelectorAll('#savedTableContainer input[type="checkbox"]');
-                savedTableCheckboxes.forEach(checkbox => {
-                    checkbox.remove();
                 });
             } else {
                 // If no receipt data is found, display a message

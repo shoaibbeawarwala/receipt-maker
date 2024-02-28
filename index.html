@@ -62,6 +62,13 @@
         }
         .receipt-summary {
             float: right; /* Align to the right */
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+                background-color: #f9f9f9;}
+        .summary-item {
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -89,26 +96,22 @@
         </tbody>
     </table>
     <div class="receipt-summary">
-        <table id="summaryTable">
-            <tbody>
-                <tr>
-                    <td>Bill Total</td>
-                    <td id="billTotal">0.00</td>
-                </tr>
-                <tr>
-                    <td>Discount (%)</td>
-                    <td><input type="number" id="discount" class="input-field" oninput="calculateGrandTotal()" value="0"></td>
-                </tr>
-                <tr>
-                    <td>Tax</td>
-                    <td><input type="number" id="tax" class="input-field" oninput="calculateGrandTotal()" value="0"></td>
-                </tr>
-                <tr>
-                    <td>Grand Total</td>
-                    <td id="grandTotal">0.00</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="summary-item">
+            <span>Bill Total:</span>
+            <span id="billTotal">0.00</span>
+        </div>
+        <div class="summary-item">
+            <span>Discount:</span>
+            <input type="number" id="discount" class="input-field" oninput="calculateGrandTotal()" value="0">
+        </div>
+        <div class="summary-item">
+            <span>Tax:</span>
+            <input type="number" id="tax" class="input-field" oninput="calculateGrandTotal()" value="0">
+        </div>
+        <div class="summary-item">
+            <span>Grand Total:</span>
+            <span id="grandTotal">0.00</span>
+        </div>
         <button id="saveReceiptButton" onclick="saveReceipt()">Save Receipt</button>
     </div>
     <div id="saveStatus"></div>
@@ -160,18 +163,21 @@
 
             const table = document.getElementById('productsTable').getElementsByTagName('tbody')[0];
             const newRow = table.insertRow(table.rows.length);
-            newRow.innerHTML = `<td>${serialNo++}</td><td>${productName}</td><td>${productQuantity}</td><td>${productPrice.toFixed(2)}</td><td>${total.toFixed(2)}</td>`;
+            newRow.innerHTML = `<td>${serialNo++}</td><td class="editable">${productName}</td><td class="editable">${productQuantity}</td><td class="editable">${productPrice.toFixed(2)}</td><td>${total.toFixed(2)}</td>`;
 
             // Update bill total
             calculateBillTotal();
 
+            // Make cells editable
+            makeCellsEditable();
+
             // Clear inputs after adding
-            document.getElementById('productName').value = '';
+            document.getElementById('productName').value = productName;
             document.getElementById('productQuantity').value = '';
             document.getElementById('productPrice').value = '';
 
-            // Clear suggestions list
-            document.getElementById('suggestionList').innerHTML = "";
+            // Focus on the product quantity input field after adding a product
+            document.getElementById('productQuantity').focus();
         }
 
         function calculateBillTotal() {
@@ -188,8 +194,7 @@
             const billTotal = parseFloat(document.getElementById('billTotal').innerText);
             const discount = parseFloat(document.getElementById('discount').value);
             const tax = parseFloat(document.getElementById('tax').value);
-            const discountAmount = billTotal * (discount / 100);
-            const grandTotal = billTotal - discountAmount + tax;
+            const grandTotal = billTotal - discount + tax;
             document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
         }
 
@@ -214,6 +219,18 @@
 
             // Redirect to saved receipt page
             window.location.href = 'saved_receipt.html';
+        }
+
+        function makeCellsEditable() {
+            const cells = document.querySelectorAll('#productsTable td.editable');
+            cells.forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const value = prompt('Enter new value:');
+                    if (value !== null) {
+                        this.innerText = value;
+                    }
+                });
+            });
         }
     </script>
 </body>

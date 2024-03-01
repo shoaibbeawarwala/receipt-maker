@@ -159,7 +159,7 @@
             const productName = document.getElementById('productName').value;
             const productQuantity = parseInt(document.getElementById('productQuantity').value, 10);
             const productPrice = parseFloat(document.getElementById('productPrice').value);
-            var total = productPrice * productQuantity;
+            function total() = productPrice * productQuantity;
 
             const table = document.getElementById('productsTable').getElementsByTagName('tbody')[0];
             const newRow = table.insertRow(table.rows.length);
@@ -170,10 +170,11 @@
 
             // Make cells editable
             makeCellsEditable();
+            total()
             
             calculateBillTotal()
              calculateGrandTotal()
-            
+           
             
 
             // Clear inputs after adding
@@ -234,6 +235,7 @@
                     if (value !== null) {
                         this.innerText = value;
                     }
+            total()        
     
             calculateBillTotal()
              calculateGrandTotal()

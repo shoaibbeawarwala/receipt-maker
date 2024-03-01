@@ -159,7 +159,7 @@
             const productName = document.getElementById('productName').value;
             const productQuantity = parseInt(document.getElementById('productQuantity').value, 10);
             const productPrice = parseFloat(document.getElementById('productPrice').value);
-            function total() = productPrice * productQuantity;
+            const total = productPrice * productQuantity;
 
             const table = document.getElementById('productsTable').getElementsByTagName('tbody')[0];
             const newRow = table.insertRow(table.rows.length);
@@ -170,10 +170,8 @@
 
             // Make cells editable
             makeCellsEditable();
-            total()
+           
             
-            calculateBillTotal()
-             calculateGrandTotal()
            
             
 
@@ -235,11 +233,8 @@
                     if (value !== null) {
                         this.innerText = value;
                     }
-            total()        
-    
-            calculateBillTotal()
-             calculateGrandTotal()
-                    var total = productPrice * productQuantity
+            
+                   
                     
                 });
             });

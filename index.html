@@ -170,6 +170,11 @@
 
             // Make cells editable
             makeCellsEditable();
+            addProduct()
+            calculateBillTotal()
+             calculateGrandTotal()
+            
+            
 
             // Clear inputs after adding
             document.getElementById('productName').value = productName;
@@ -229,6 +234,10 @@
                     if (value !== null) {
                         this.innerText = value;
                     }
+                   addProduct()
+            calculateBillTotal()
+             calculateGrandTotal()
+                    
                 });
             });
         }

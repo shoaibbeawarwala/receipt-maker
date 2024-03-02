@@ -245,17 +245,17 @@
     }
 
     function updateRowTotal(row) {
-        let total = 0;
-        const priceCell = row.querySelector('td.editable[data-price]');
-        const quantityCell = row.querySelector('td.editable[data-quantity]');
-        const price = parseFloat(priceCell.dataset.price);
-        const quantity = parseFloat(quantityCell.dataset.quantity);
-        if (!isNaN(price) && !isNaN(quantity)) {
-            total = price * quantity;
-        }
-        row.cells[4].innerText = total.toFixed(2);
-        calculateBillTotal();
+    let total = 0;
+    const priceCell = row.querySelector('td.editable[data-price]');
+    const quantityCell = row.querySelector('td.editable[data-quantity]');
+    const price = parseFloat(priceCell.dataset.price);
+    const quantity = parseFloat(quantityCell.dataset.quantity);
+    if (!isNaN(price) && !isNaN(quantity)) {
+        total = price * quantity;
     }
+    row.cells[4].innerText = total.toFixed(2);
+    calculateBillTotal();
+}
 
   
 </script>

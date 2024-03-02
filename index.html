@@ -221,7 +221,8 @@
         window.location.href = 'saved_receipt.html';
     }
 
-  function makeCellsEditable() {
+
+    function makeCellsEditable() {
         const cells = document.querySelectorAll('#productsTable td.editable');
         cells.forEach(cell => {
             cell.addEventListener('click', function() {
@@ -245,17 +246,19 @@
     }
 
     function updateRowTotal(row) {
-    let total = 0;
-    const priceCell = row.querySelector('td.editable[data-price]');
-    const quantityCell = row.querySelector('td.editable[data-quantity]');
-    const price = parseFloat(priceCell.dataset.price);
-    const quantity = parseFloat(quantityCell.dataset.quantity);
-    if (!isNaN(price) && !isNaN(quantity)) {
-        total = price * quantity;
+        let total = 0;
+        const priceCell = parseFloat(row.querySelector('td.editable[data-price]').innerText);
+        const quantityCell = parseFloat(row.querySelector('td.editable[data-quantity]').innerText);
+        if (!isNaN(priceCell) && !isNaN(quantityCell)) {
+            total = priceCell * quantityCell;
+        }
+        row.cells[4].innerText = total.toFixed(2);
+        calculateBillTotal();
     }
-    row.cells[4].innerText = total.toFixed(2);
-    calculateBillTotal();
-}
+
+    // Existing code...
+
+
 
   
 </script>

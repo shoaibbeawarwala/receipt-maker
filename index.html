@@ -222,34 +222,23 @@
     }
 
 function makeCellsEditable() {
-    const cells = document.querySelectorAll('#productsTable td.editable');
-    cells.forEach(cell => {
-        cell.addEventListener('click', function() {
-            const value = this.innerText;
-            this.innerHTML = `<input type="text" class="editable-cell" value="${value}" onblur="updateCellValue(this)">`;
-            this.querySelector('.editable-cell').focus();
+        const cells = document.querySelectorAll('#productsTable td.editable');
+        cells.forEach(cell => {
+            cell.addEventListener('click', function() {
+                const value = prompt('Enter new value:');
+                if (value !== null) {
+                    if (this.dataset.quantity !== undefined) {
+                        this.dataset.quantity = value;
+                    } else if (this.dataset.price !== undefined) {
+                        this.dataset.price = value;
+                    }
+                    this.innerText = value;
+                    updateRowTotal(this.closest('tr'));
+                }
+            });
         });
-        cell.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                const input = this.querySelector('.editable-cell');
-                updateCellValue(input);
-            }
-        });
-    });
-}
-
-
-    function updateCellValue(input) {
-        const newValue = input.value;
-        const cell = input.parentNode;
-        const oldValue = cell.dataset.oldValue;
-        cell.innerText = newValue;
-        cell.dataset.oldValue = newValue;
-        if (newValue !== oldValue) {
-            const row = cell.parentNode;
-            updateRowTotal(row);
-        }
     }
+
 
     function updateRowTotal(row) {
         let total = 0;

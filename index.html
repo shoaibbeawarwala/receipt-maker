@@ -221,17 +221,17 @@
         window.location.href = 'saved_receipt.html';
     }
 
-
-    function makeCellsEditable() {
-        const cells = document.querySelectorAll('#productsTable td.editable');
-        cells.forEach(cell => {
-            cell.addEventListener('click', function() {
-                const value = this.innerText;
-                this.innerHTML = `<input type="text" class="editable-cell" value="${value}" onblur="updateCellValue(this)">`;
-                this.querySelector('.editable-cell').focus();
-            });
+function makeCellsEditable() {
+    const cells = document.querySelectorAll('#productsTable td.editable');
+    cells.forEach(cell => {
+        cell.addEventListener('click', function() {
+            const value = this.innerText;
+            this.innerHTML = `<input type="text" class="editable-cell" value="${value}" onblur="updateCellValue(this)">`;
+            this.querySelector('.editable-cell').focus();
         });
-    }
+    });
+}
+
 
     function updateCellValue(input) {
         const newValue = input.value;

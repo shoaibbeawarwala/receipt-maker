@@ -221,7 +221,7 @@
         window.location.href = 'saved_receipt.html';
     }
 
- function makeCellsEditable() {
+  function makeCellsEditable() {
         const cells = document.querySelectorAll('#productsTable td.editable');
         cells.forEach(cell => {
             cell.addEventListener('click', function() {
@@ -239,20 +239,20 @@
         cell.innerText = newValue;
         cell.dataset.oldValue = newValue;
         if (newValue !== oldValue) {
-            updateRowTotal(cell.closest('tr'));
+            const row = cell.parentNode;
+            updateRowTotal(row);
         }
     }
 
     function updateRowTotal(row) {
-        const cells = row.querySelectorAll('td.editable[data-price], td.editable[data-quantity]');
         let total = 0;
-        cells.forEach(cell => {
-            const price = parseFloat(cell.dataset.price);
-            const quantity = parseFloat(cell.dataset.quantity);
-            if (!isNaN(price) && !isNaN(quantity)) {
-                total += price * quantity;
-            }
-        });
+        const priceCell = row.querySelector('td.editable[data-price]');
+        const quantityCell = row.querySelector('td.editable[data-quantity]');
+        const price = parseFloat(priceCell.dataset.price);
+        const quantity = parseFloat(quantityCell.dataset.quantity);
+        if (!isNaN(price) && !isNaN(quantity)) {
+            total = price * quantity;
+        }
         row.cells[4].innerText = total.toFixed(2);
         calculateBillTotal();
     }

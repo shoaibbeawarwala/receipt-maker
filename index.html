@@ -3,79 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Receipt Maker</title>
-    <link rel = "icon" href = "download.png" type = "image/x-icon">
+    <title>Receipt Maker</title>
+    <link rel="icon" href="download.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* General Styles */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
         }
+
+        /* Header */
+        h1 {
+            background-color: #467da1;
+            color: #fff;
+            padding: 30px;
+            margin: 0;
+            text-align: center;
+            font-weight: 300;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Input Fields */
+        .input-field {
+            padding: 12px 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+            font-size: 16px;
+            width: 200px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #fffb00;
+            box-shadow: 0 0 5px rgba(66, 133, 244, 0.3);
+        }
+
+        #productName {
+            background-color: #f8d6ee;
+        }
+
+        #productQuantity, #discount, #tax {
+            background-color: #c3ecf5;
+        }
+        #productPrice {
+            background-color: #c3ecf5;
+        }
+        /* Buttons */
+        .add-product-button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-product-button:hover {
+            background-color: #388e3c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #saveReceiptButton {
+            background-color: #e53935;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #saveReceiptButton:hover {
+            background-color: #c62828;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .add-product-button {
+            float: right;
+            margin-right: 20px;
+        }
+
+        /* Table */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
         }
+
         th, td {
-            padding: 8px;
+            padding: 16px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+
         th {
             background-color: #f2f2f2;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .input-field {
-            padding: 6px;
-            width: 150px; /* Adjust width to align items horizontally */
-            box-sizing: border-box;
-            display: inline-block; /* Align inputs side by side */
-            margin-right: 10px; /* Space between inputs */
+
+        tr:hover {
+            background-color: #fff563;
         }
-        .add-product-button, #saveReceiptButton {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px; /* Larger button text */
-        }
-        #saveReceiptButton {
-            background-color: #008CBA;
-        }
-        .add-product-button {
-            float: right; /* Position button to the right */
-            margin-right: 20px; /* Space from the right edge */
-        }
+
+        /* Suggestions */
         .suggestions {
             position: absolute;
-            background-color: #f1f1f1;
-            border: 1px solid #ccc;
-            max-height: 100px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            max-height: 200px;
             overflow-y: auto;
             z-index: 1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            animation: fadeIn 0.3s ease;
         }
+
         .suggestions li {
             list-style-type: none;
             padding: 8px 12px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
+
         .suggestions li:hover {
-            background-color: #ddd;
+            background-color: #f5f5f5;
         }
+
+        /* Receipt Summary */
         .receipt-summary {
-            float: right; /* Align to the right */
+            float: right;
             border: 1px solid #ddd;
-            padding: 10px;
+            padding: 20px;
             margin-top: 20px;
             border-radius: 5px;
-                background-color: #f9f9f9;}
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease;
+        }
+
         .summary-item {
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-item span:first-child {
+            font-weight: 500;
+        }
+
+        /* Save Status */
+        #saveStatus {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-weight: 500;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
         }
     </style>
 </head>
 <body>
     <h1>Receipt Maker</h1>
-    <div>
+    <div style="padding: 20px;">
         <input type="text" id="productName" placeholder="Product Name" class="input-field" oninput="showSuggestions()" onkeydown="handleKeyDown(event)">
         <ul class="suggestions" id="suggestionList"></ul>
         <input type="number" id="productQuantity" placeholder="Quantity" class="input-field">
@@ -118,7 +250,8 @@
     <div id="saveStatus"></div>
 
     <script>
-    let serialNo = 1;
+        // Existing JavaScript code...
+        let serialNo = 1;
 
     const suggestions = ["coat pant", "shirt", "t-shirt", "suit", "pant", "blazer", "kurta pajama", "Koti", "CASH"];
 
@@ -250,12 +383,34 @@ function makeCellsEditable() {
         calculateBillTotal();
     }
     // Existing code...
+    
+        
+        function handleTabKey(event) {
+            if (event.key === 'Tab') {
+                event.preventDefault(); // Prevent the default tab behavior
 
+                // Get the focused element
+                const focusedElement = document.activeElement;
 
+                // If the focused element is the "Add Product" button, call the addProduct function
+                if (focusedElement.id === 'addProductButton') {
+                    addProduct();
+                    document.getElementById('productQuantity').focus(); // Move focus back to quantity input field
+                } else {
+                    // Get the focused input field
+                    const inputs = document.querySelectorAll('.input-field');
+                    let currentIndex = Array.from(inputs).indexOf(focusedElement);
 
-  
-</script>
+                    // Move to the next input field or the "Add Product" button
+                    if (currentIndex === inputs.length - 1) {
+                        document.getElementById('addProductButton').focus();
+                    } else {
+                        inputs[currentIndex + 1].focus();
+                    }
+                }
+            }
+        }
 
-     
+    </script>
 </body>
 </html>

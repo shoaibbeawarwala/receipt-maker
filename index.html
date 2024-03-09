@@ -225,21 +225,19 @@
 function makeCellsEditable() {
         const cells = document.querySelectorAll('#productsTable td.editable');
         cells.forEach(cell => {
-            cell.addEventListener('click', function() {
-                const value = prompt('Enter new value:');
-                if (value !== null) {
-                    if (this.dataset.quantity !== undefined) {
-                        this.dataset.quantity = value;
-                    } else if (this.dataset.price !== undefined) {
-                        this.dataset.price = value;
-                    }
-                    this.innerText = value;
-                    updateRowTotal(this.closest('tr'));
+            cell.contentEditable = true;
+            cell.addEventListener('input', function() {
+                updateRowTotal(this.closest('tr'));
+            });
+            cell.addEventListener('blur', function() {
+                if (this.dataset.quantity !== undefined) {
+                    this.dataset.quantity = this.innerText;
+                } else if (this.dataset.price !== undefined) {
+                    this.dataset.price = this.innerText;
                 }
             });
         });
     }
-
 
     function updateRowTotal(row) {
         let total = 0;
@@ -251,7 +249,6 @@ function makeCellsEditable() {
         row.cells[4].innerText = total.toFixed(2);
         calculateBillTotal();
     }
-
     // Existing code...
 
 

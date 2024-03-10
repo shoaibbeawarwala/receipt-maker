@@ -393,7 +393,7 @@ function makeCellsEditable() {
                 const focusedElement = document.activeElement;
 
                 // If the focused element is the "Add Product" button, call the addProduct function
-                if (focusedElement.id === 'addProductButton') {
+                if (focusedElement.id === 'add-product-button') {
                     addProduct();
                     document.getElementById('productQuantity').focus(); // Move focus back to quantity input field
                 } else {
@@ -403,7 +403,7 @@ function makeCellsEditable() {
 
                     // Move to the next input field or the "Add Product" button
                     if (currentIndex === inputs.length - 1) {
-                        document.getElementById('addProductButton').focus();
+                        document.getElementById('add-product-button').focus();
                     } else {
                         inputs[currentIndex + 1].focus();
                     }

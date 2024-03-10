@@ -383,7 +383,34 @@ function makeCellsEditable() {
         calculateBillTotal();
     }
     // Existing code...
-    
+    function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent the default enter behavior
+
+        // Get the focused element
+        const focusedElement = document.activeElement;
+
+        // If the focused element is the "Add Product" button or the last input field, call the addProduct function
+        if (focusedElement.id === 'add-product-button' || focusedElement.id === 'productPrice') {
+            addProduct();
+            document.getElementById('productQuantity').focus(); // Move focus back to quantity input field
+        } else {
+            // Get the focused input field
+            const inputs = document.querySelectorAll('.input-field');
+            let currentIndex = Array.from(inputs).indexOf(focusedElement);
+
+            // Move to the next input field or the "Add Product" button
+            if (currentIndex === inputs.length - 1) {
+                document.getElementById('add-product-button').focus();
+            } else {
+                inputs[currentIndex + 1].focus();
+            }
+        }
+    } else if (event.key === 'Tab') {
+        handleTabKey(event);
+    }
+}
+
         
         function handleTabKey(event) {
     if (event.key === 'Tab') {

@@ -383,7 +383,7 @@ function makeCellsEditable() {
         calculateBillTotal();
     }
     // Existing code...
-    function handleKeyDown(event) {
+   function handleKeyDown(event) {
     if (event.key === 'Enter') {
         event.preventDefault(); // Prevent the default enter behavior
 
@@ -398,15 +398,14 @@ function makeCellsEditable() {
             if (firstSuggestion) {
                 focusedElement.value = firstSuggestion.textContent;
                 suggestionList.innerHTML = "";
-                document.getElementById('productQuantity').focus(); // Move focus to the quantity input field
-            } else {
-                document.getElementById('productQuantity').focus(); // Move focus to the quantity input field
             }
+            document.getElementById('productQuantity').focus(); // Move focus to the quantity input field
         } else if (focusedElement.id === 'productQuantity') {
             document.getElementById('productPrice').focus(); // Move focus to the price input field
         } else if (focusedElement.id === 'productPrice') {
             addProduct(); // Call the addProduct function
-            document.getElementById('productQuantity').focus(); // Move focus back to the quantity input field
+            document.getElementById('productName').focus(); // Move focus back to the product name input field
+            document.getElementById('productName').select(); // Select the content of the product name input field
         }
     } else if (event.key === 'Tab') {
         handleTabKey(event);

@@ -276,19 +276,7 @@
         });
     }
 
-    function handleKeyDown(event) {
-        if (event.key === 'Enter') {
-            const input = document.getElementById("productName");
-            const suggestionList = document.getElementById("suggestionList");
-            const firstSuggestion = suggestionList.querySelector("li");
-
-            if (firstSuggestion) {
-                input.value = firstSuggestion.textContent;
-                suggestionList.innerHTML = "";
-            }
-        }
-    }
-
+   
     function addProduct() {
         const productName = document.getElementById('productName').value;
         const productQuantity = parseInt(document.getElementById('productQuantity').value, 10);
@@ -404,15 +392,16 @@ function handleKeyDown(event) {
             document.getElementById('productPrice').focus(); // Move focus to the price input field
         } else if (focusedElement.id === 'productPrice') {
             addProduct(); // Call the addProduct function
+            document.getElementById('productName').value = productName; 
+            document.getElementById('productQuantity').value = ''; // Clear the quantity input field
+            document.getElementById('productPrice').value = ''; // Clear the price input field
             document.getElementById('productName').focus(); // Move focus back to the product name input field
-            document.getElementById('productName').select(); // Select the content of the product name input field
         } else if (focusedElement.id === 'add-product-button') {
             addProduct(); // Call the addProduct function
             document.getElementById('productQuantity').focus(); // Move focus to the quantity input field
         }
     }
 }
-
         
         
     </script>

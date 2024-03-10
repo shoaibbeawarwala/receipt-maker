@@ -386,31 +386,30 @@ function makeCellsEditable() {
     
         
         function handleTabKey(event) {
-            if (event.key === 'Tab') {
-                event.preventDefault(); // Prevent the default tab behavior
+    if (event.key === 'Tab') {
+        event.preventDefault(); // Prevent the default tab behavior
 
-                // Get the focused element
-                const focusedElement = document.activeElement;
+        // Get the focused element
+        const focusedElement = document.activeElement;
 
-                // If the focused element is the "Add Product" button, call the addProduct function
-                if (focusedElement.id === 'add-product-button') {
-                    addProduct();
-                    document.getElementById('productQuantity').focus(); // Move focus back to quantity input field
-                } else {
-                    // Get the focused input field
-                    const inputs = document.querySelectorAll('.input-field');
-                    let currentIndex = Array.from(inputs).indexOf(focusedElement);
+        // If the focused element is the "Add Product" button or the last input field, call the addProduct function
+        if (focusedElement.id === 'add-product-button' || focusedElement.id === 'productPrice') {
+            addProduct();
+            document.getElementById('productQuantity').focus(); // Move focus back to quantity input field
+        } else {
+            // Get the focused input field
+            const inputs = document.querySelectorAll('.input-field');
+            let currentIndex = Array.from(inputs).indexOf(focusedElement);
 
-                    // Move to the next input field or the "Add Product" button
-                    if (currentIndex === inputs.length - 1) {
-                        document.getElementById('add-product-button').focus();
-                    } else {
-                        inputs[currentIndex + 1].focus();
-                    }
-                }
+            // Move to the next input field or the "Add Product" button
+            if (currentIndex === inputs.length - 1) {
+                document.getElementById('add-product-button').focus();
+            } else {
+                inputs[currentIndex + 1].focus();
             }
         }
-
+    }
+}
     </script>
 </body>
 </html>

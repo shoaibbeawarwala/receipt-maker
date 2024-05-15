@@ -57,6 +57,7 @@
         #productPrice {
             background-color: #c3ecf5;
         }
+
         /* Buttons */
         .add-product-button {
             background-color: #4CAF50;
@@ -68,6 +69,8 @@
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            float: right;
+            margin-right: 20px;
         }
 
         .add-product-button:hover {
@@ -76,33 +79,11 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        #saveReceiptButton {
-            background-color: #e53935;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            padding: 12px 24px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        #saveReceiptButton:hover {
-            background-color: #c62828;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .add-product-button {
-            float: right;
-            margin-right: 20px;
-        }
-
         /* Table */
         table {
-            width: 100%;
+            width: 75%;
             border-collapse: collapse;
+            margin: 0 auto; /* Center the table */
             margin-bottom: 20px;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -111,7 +92,7 @@
         }
 
         th, td {
-            padding: 8px; /* Reduced padding */
+            padding: 8px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
@@ -121,6 +102,7 @@
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            width: 10%;
         }
 
         tr:hover {
@@ -217,9 +199,9 @@
     <table id="productsTable">
         <thead>
             <tr>
-                <th>S.No.</th>
+                <th></th>
                 <th>Product Name</th>
-                <th>Quantity</th>
+                <th>Qty</th>
                 <th>Price</th>
                 <th>Total</th>
             </tr>
@@ -250,6 +232,7 @@
     <div id="saveStatus"></div>
 
     <script>
+        // Existing JavaScript code...
         // Existing JavaScript code...
         let serialNo = 1;
 
@@ -404,6 +387,8 @@ function handleKeyDown(event) {
 }
         
         
+ 
+
     </script>
 </body>
 </html>

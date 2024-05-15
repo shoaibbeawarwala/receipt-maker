@@ -59,8 +59,8 @@
         }
 
         /* Buttons */
-        .add-product-button {
-            background-color: #4CAF50;
+        .add-product-button, #saveReceiptButton {
+            background-color: #e53935;
             color: #fff;
             border: none;
             border-radius: 4px;
@@ -69,12 +69,11 @@
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            float: right;
             margin-right: 20px;
         }
 
-        .add-product-button:hover {
-            background-color: #388e3c;
+        .add-product-button:hover, #saveReceiptButton:hover {
+            background-color: #c62828;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
@@ -83,8 +82,7 @@
         table {
             width: 75%;
             border-collapse: collapse;
-            margin: 0 auto; /* Center the table */
-            margin-bottom: 20px;
+            margin: 20px;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-radius: 4px;
@@ -102,7 +100,6 @@
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            width: 10%;
         }
 
         tr:hover {
@@ -135,7 +132,6 @@
 
         /* Receipt Summary */
         .receipt-summary {
-            float: right;
             border: 1px solid #ddd;
             padding: 20px;
             margin-top: 20px;
@@ -143,6 +139,7 @@
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             animation: slideIn 0.5s ease;
+            margin-left: 20px;
         }
 
         .summary-item {
@@ -199,9 +196,9 @@
     <table id="productsTable">
         <thead>
             <tr>
-                <th></th>
+                <th>S.No.</th>
                 <th>Product Name</th>
-                <th>Qty</th>
+                <th>Quantity</th>
                 <th>Price</th>
                 <th>Total</th>
             </tr>
@@ -227,7 +224,7 @@
             <span>Grand Total:</span>
             <span id="grandTotal">0.00</span>
         </div>
-        <button id="saveReceiptButton" onclick="saveReceipt()" style="margin-top: 10px;">Save Receipt</button>
+        <button id="saveReceiptButton" onclick="saveReceipt()">Save Receipt</button>
     </div>
     <div id="saveStatus"></div>
 
@@ -387,8 +384,8 @@ function handleKeyDown(event) {
 }
         
         
-
-
     </script>
+
+
 </body>
 </html>

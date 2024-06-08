@@ -78,20 +78,15 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Table Container */
-        .table-container {
-            max-height: 300px; /* Adjust this height as needed */
-            overflow-y: auto;
+        /* Table */
+        table {
+            width: 75%;
+            border-collapse: collapse;
             margin: 20px;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-radius: 4px;
             overflow: hidden;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
         }
 
         th, td {
@@ -200,22 +195,20 @@
         <input type="text" id="productPrice" placeholder="Price" class="input-field">
         <button onclick="addProduct()" class="add-product-button">Add Product</button>
     </div>
-    <div class="table-container">
-        <table id="productsTable">
-            <thead>
-                <tr>
-                    <th>S.No.</th>
-                    <th>Product Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Products will be added here -->
-            </tbody>
-        </table>
-    </div>
+    <table id="productsTable">
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Products will be added here -->
+        </tbody>
+    </table>
     <div class="receipt-summary">
         <div class="summary-item">
             <span>Bill Total:</span>
@@ -238,145 +231,163 @@
     <div id="saveStatus"></div>
 
     <script>
+        // Existing JavaScript code...
+        // Existing JavaScript code...
         let serialNo = 1;
-        const suggestions = ["coat pant", "shirt", "t-shirt", "suit", "pant", "blazer", "kurta pajama", "Koti", "CASH"];
 
-        function showSuggestions() {
-            const input = document.getElementById("productName");
-            const suggestionList = document.getElementById("suggestionList");
-            const userInput = input.value.toLowerCase();
-            
-            suggestionList.innerHTML = ""; // Clear previous suggestions
-            
-            if (userInput.length === 0) {
-                suggestionList.style.display = 'none';
-                return;
-            }
+    const suggestions = ["coat pant", "shirt", "t-shirt", "suit", "pant", "blazer", "kurta pajama", "Koti", "CASH"];
 
-            const filteredSuggestions = suggestions.filter(suggestion => 
-                suggestion.toLowerCase().startsWith(userInput)
-            );
+    function showSuggestions() {
+        const input = document.getElementById("productName");
+        const suggestionList = document.getElementById("suggestionList");
+        const userInput = input.value.toLowerCase();
 
-            if (filteredSuggestions.length === 0) {
-                suggestionList.style.display = 'none';
-                return;
-            }
+        const suggestionsToShow = suggestions.filter(suggestion =>
+            suggestion.toLowerCase().startsWith(userInput)
+        );
 
-            filteredSuggestions.forEach(suggestion => {
-                const li = document.createElement('li');
-                li.textContent = suggestion;
-                li.onclick = () => {
-                    input.value = suggestion;
-                    suggestionList.innerHTML = "";
-                    suggestionList.style.display = 'none';
-                };
-                suggestionList.appendChild(li);
-            });
-
-            suggestionList.style.display = 'block';
-        }
-
-        function handleKeyDown(event) {
-            const suggestionList = document.getElementById("suggestionList");
-            const suggestions = suggestionList.getElementsByTagName("li");
-            let index = -1;
-
-            if (event.key === "ArrowDown") {
-                index = Math.min(index + 1, suggestions.length - 1);
-            } else if (event.key === "ArrowUp") {
-                index = Math.max(index - 1, 0);
-            } else if (event.key === "Enter") {
-                event.preventDefault();
-                if (index >= 0 && index < suggestions.length) {
-                    suggestions[index].click();
-                }
-            }
-
-            for (let i = 0; i < suggestions.length; i++) {
-                if (i === index) {
-                    suggestions[i].classList.add("highlight");
-                } else {
-                    suggestions[i].classList.remove("highlight");
-                }
-            }
-        }
-
-        function addProduct() {
-            const productName = document.getElementById("productName").value.trim();
-            const productQuantity = document.getElementById("productQuantity").value.trim();
-            const productPrice = document.getElementById("productPrice").value.trim();
-
-            if (!productName || !productQuantity || !productPrice) {
-                alert("Please fill all the fields");
-                return;
-            }
-
-            const table = document.getElementById("productsTable").getElementsByTagName("tbody")[0];
-            const newRow = table.insertRow(0); // Insert at the top
-            newRow.innerHTML = `
-                <td>${serialNo++}</td>
-                <td>${productName}</td>
-                <td>${productQuantity}</td>
-                <td>${productPrice}</td>
-                <td>${(productQuantity * productPrice).toFixed(2)}</td>
-            `;
-
-            document.getElementById("productName").value = "";
-            document.getElementById("productQuantity").value = "";
-            document.getElementById("productPrice").value = "";
-            showSuggestions(); // Clear suggestions
-
-            calculateBillTotal();
-            calculateGrandTotal();
-        }
-
-        function calculateBillTotal() {
-            let billTotal = 0;
-            const table = document.getElementById("productsTable").getElementsByTagName("tbody")[0];
-            for (let row of table.rows) {
-                billTotal += parseFloat(row.cells[4].innerText);
-            }
-            document.getElementById("billTotal").innerText = billTotal.toFixed(2);
-        }
-
-        function calculateGrandTotal() {
-            const billTotal = parseFloat(document.getElementById("billTotal").innerText);
-            const discount = parseFloat(document.getElementById("discount").value) || 0;
-            const tax = parseFloat(document.getElementById("tax").value) || 0;
-            const grandTotal = billTotal - discount + tax;
-            document.getElementById("grandTotal").innerText = grandTotal.toFixed(2);
-        }
-
-        function saveReceipt() {
-            const receipt = {
-                billTotal: document.getElementById("billTotal").innerText,
-                discount: document.getElementById("discount").value,
-                tax: document.getElementById("tax").value,
-                grandTotal: document.getElementById("grandTotal").innerText,
-                products: []
+        suggestionList.innerHTML = "";
+        suggestionsToShow.forEach(suggestion => {
+            const li = document.createElement("li");
+            li.textContent = suggestion;
+            li.onclick = () => {
+                input.value = suggestion;
+                suggestionList.innerHTML = "";
             };
+            suggestionList.appendChild(li);
+        });
+    }
 
-            const table = document.getElementById("productsTable").getElementsByTagName("tbody")[0];
-            for (let row of table.rows) {
-                receipt.products.push({
-                    serialNo: row.cells[0].innerText,
-                    productName: row.cells[1].innerText,
-                    productQuantity: row.cells[2].innerText,
-                    productPrice: row.cells[3].innerText,
-                    total: row.cells[4].innerText
-                });
-            }
+   
+    function addProduct() {
+        const productName = document.getElementById('productName').value;
+        const productQuantity = parseInt(document.getElementById('productQuantity').value, 10);
+        const productPrice = parseFloat(document.getElementById('productPrice').value);
+        const total = productPrice * productQuantity;
 
-            const blob = new Blob([JSON.stringify(receipt, null, 2)], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `receipt_${Date.now()}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
+        const table = document.getElementById('productsTable').getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow(table.rows.length);
+        newRow.innerHTML = `<td>${serialNo++}</td><td class="editable">${productName}</td><td class="editable" data-quantity="${productQuantity}">${productQuantity}</td><td class="editable" data-price="${productPrice}">${productPrice.toFixed(2)}</td><td>${total.toFixed(2)}</td>`;
 
-            document.getElementById("saveStatus").innerText = "Receipt saved successfully!";
+        // Update bill total
+        calculateBillTotal();
+
+        // Make cells editable
+        makeCellsEditable();
+
+        // Clear inputs after adding
+        document.getElementById('productName').value = productName;
+        document.getElementById('productQuantity').value = '';
+        document.getElementById('productPrice').value = '';
+
+        // Focus on the product name input field after adding a product
+        document.getElementById('productQuantity').focus();
+    }
+
+    function calculateBillTotal() {
+        const rows = document.getElementById('productsTable').getElementsByTagName('tbody')[0].rows;
+        let billTotal = 0;
+        for (let i = 0; i < rows.length; i++) {
+            billTotal += parseFloat(rows[i].cells[4].innerText);
         }
+        document.getElementById('billTotal').innerText = billTotal.toFixed(2);
+        calculateGrandTotal();
+    }
+
+    function calculateGrandTotal() {
+        const billTotal = parseFloat(document.getElementById('billTotal').innerText);
+        const discount = parseFloat(document.getElementById('discount').value);
+        const tax = parseFloat(document.getElementById('tax').value);
+        const grandTotal = billTotal - discount + tax;
+        document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
+    }
+
+    function saveReceipt() {
+        const rows = document.getElementById('productsTable').getElementsByTagName('tbody')[0].rows;
+        if (rows.length === 0) {
+            document.getElementById('saveStatus').innerText = 'No products to save.';
+            return;
+        }
+
+        // Prepare receipt data
+        const receiptData = {
+            tableHTML: document.getElementById('productsTable').outerHTML,
+            billTotal: document.getElementById('billTotal').innerText,
+            discount: document.getElementById('discount').value,
+            tax: document.getElementById('tax').value,
+            grandTotal: document.getElementById('grandTotal').innerText
+        };
+
+        // Store receipt data in localStorage
+        localStorage.setItem('receiptData', JSON.stringify(receiptData));
+
+        // Redirect to saved receipt page
+        window.location.href = 'saved_receipt.html';
+    }
+
+function makeCellsEditable() {
+        const cells = document.querySelectorAll('#productsTable td.editable');
+        cells.forEach(cell => {
+            cell.contentEditable = true;
+            cell.addEventListener('input', function() {
+                updateRowTotal(this.closest('tr'));
+            });
+            cell.addEventListener('blur', function() {
+                if (this.dataset.quantity !== undefined) {
+                    this.dataset.quantity = this.innerText;
+                } else if (this.dataset.price !== undefined) {
+                    this.dataset.price = this.innerText;
+                }
+            });
+        });
+    }
+
+    function updateRowTotal(row) {
+        let total = 0;
+        const priceCell = parseFloat(row.querySelector('td.editable[data-price]').innerText);
+        const quantityCell = parseFloat(row.querySelector('td.editable[data-quantity]').innerText);
+        if (!isNaN(priceCell) && !isNaN(quantityCell)) {
+            total = priceCell * quantityCell;
+        }
+        row.cells[4].innerText = total.toFixed(2);
+        calculateBillTotal();
+    }
+    // Existing code...
+function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent the default enter behavior
+
+        // Get the focused element
+        const focusedElement = document.activeElement;
+
+        // If the focused element is the product name input field
+        if (focusedElement.id === 'productName') {
+            const suggestionList = document.getElementById("suggestionList");
+            const firstSuggestion = suggestionList.querySelector("li");
+
+            if (firstSuggestion) {
+                focusedElement.value = firstSuggestion.textContent;
+                suggestionList.innerHTML = "";
+            }
+            document.getElementById('productQuantity').focus(); // Move focus to the quantity input field
+        } else if (focusedElement.id === 'productQuantity') {
+            document.getElementById('productPrice').focus(); // Move focus to the price input field
+        } else if (focusedElement.id === 'productPrice') {
+            addProduct(); // Call the addProduct function
+            document.getElementById('productName').value = productName; 
+            document.getElementById('productQuantity').value = ''; // Clear the quantity input field
+            document.getElementById('productPrice').value = ''; // Clear the price input field
+            document.getElementById('productName').focus(); // Move focus back to the product name input field
+        } else if (focusedElement.id === 'add-product-button') {
+            addProduct(); // Call the addProduct function
+            document.getElementById('productQuantity').focus(); // Move focus to the quantity input field
+        }
+    }
+}
+        
+        
     </script>
+
+
 </body>
 </html>
